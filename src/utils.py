@@ -1,5 +1,13 @@
 # utils.py
 
+
+from __future__ import annotations
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+
 __all__ = [
     'filter_year','remove_invalid_values','calc_value_density','calc_hub_index', 'top_value_density',
 'top_value_density', 'top_total_value', 'top_total_tons','top_hub_states','plot_value_per_ton_top10',
@@ -141,10 +149,9 @@ def plot_value_per_ton_top10(value_state_long, year=2024):
         ax.text(v + 0.02, i, f'{v:.2f}', va='center', fontsize=9)
     
     plt.tight_layout()
-    plt.savefig('/mnt/user-data/outputs/value_per_ton_top10.png', dpi=300, bbox_inches='tight')
-    plt.close()
+  
     
-    print(f"\n차트 저장 완료: value_per_ton_top10.png")
+   
 
 
 def plot_value_vs_tons_scatter(value_state_long, year=2024, top_n=20):
@@ -187,8 +194,7 @@ def plot_value_vs_tons_scatter(value_state_long, year=2024, top_n=20):
     cbar.set_label('Value per Ton', fontsize=10)
     
     plt.tight_layout()
-    plt.savefig('/mnt/user-data/outputs/value_vs_tons_scatter.png', dpi=300, bbox_inches='tight')
-    plt.close()
+    
     
     print(f"차트 저장 완료: value_vs_tons_scatter.png")
 
