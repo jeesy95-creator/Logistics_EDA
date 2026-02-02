@@ -133,7 +133,6 @@ def plot_value_per_ton_top10(value_state_long, year=2024):
     
     fig, ax = plt.subplots(figsize=(12, 6))
     
-    # 가로 막대 그래프 (역순으로 표시해서 1위가 위에 오도록)
     y_pos = np.arange(len(top10))
     ax.barh(y_pos, top10['value_per_ton'].values[::-1], alpha=0.8, color='steelblue')
     
@@ -144,11 +143,12 @@ def plot_value_per_ton_top10(value_state_long, year=2024):
     ax.set_yticklabels(top10['state'].values[::-1])
     ax.grid(axis='x', alpha=0.3)
     
-    # 값 표시
     for i, v in enumerate(top10['value_per_ton'].values[::-1]):
         ax.text(v + 0.02, i, f'{v:.2f}', va='center', fontsize=9)
     
     plt.tight_layout()
+    plt.show()
+
   
     
    
@@ -159,8 +159,6 @@ def plot_value_vs_tons_scatter(value_state_long, year=2024, top_n=20):
     Value vs Tons 산점도 (Top N 주)
     """
     year_data = value_state_long[value_state_long['year'] == year].copy()
-    
-    # Top N by value
     top_states = year_data.nlargest(top_n, 'value')
     
     fig, ax = plt.subplots(figsize=(12, 8))
@@ -174,7 +172,6 @@ def plot_value_vs_tons_scatter(value_state_long, year=2024, top_n=20):
         cmap='viridis'
     )
     
-    # 주 이름 표시
     for idx, row in top_states.iterrows():
         ax.annotate(
             row['state'],
@@ -189,31 +186,25 @@ def plot_value_vs_tons_scatter(value_state_long, year=2024, top_n=20):
     ax.set_title(f'{year} Value vs Tons - Top {top_n} States', fontsize=14, fontweight='bold')
     ax.grid(alpha=0.3)
     
-    # 컬러바
     cbar = plt.colorbar(scatter, ax=ax)
     cbar.set_label('Value per Ton', fontsize=10)
     
     plt.tight_layout()
-    
-    
-    print(f"차트 저장 완료: value_vs_tons_scatter.png")
+    plt.show()
+
 
 
 def plot_value_per_ton_trend(value_state_long, top_n=10):
     """
     Top N 주의 Value per Ton 연도별 추이
     """
-    # 2024년 기준 Top N 선정
     top_states = (
         value_state_long[value_state_long['year'] == 2024]
         .nlargest(top_n, 'value_per_ton')['state']
         .tolist()
     )
     
-    # Top N 주 데이터만 필터링
     trend_data = value_state_long[value_state_long['state'].isin(top_states)].copy()
-    
-    # 결측치 제거
     trend_data = trend_data[trend_data['value_per_ton'].notna()]
     trend_data = trend_data[~trend_data['value_per_ton'].isin([np.inf, -np.inf])]
     
@@ -236,24 +227,17 @@ def plot_value_per_ton_trend(value_state_long, top_n=10):
     ax.grid(alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('/mnt/user-data/outputs/value_per_ton_trend.png', dpi=300, bbox_inches='tight')
-    plt.close()
-    
-    print(f"차트 저장 완료: value_per_ton_trend.png")
-
+    plt.show()
 
 def plot_value_ton_comparison(value_state_long, year=2024, top_n=15):
     """
     Value와 Tons Top N 비교 (Dual Bar Chart)
     """
     year_data = value_state_long[value_state_long['year'] == year].copy()
-    
-    # Value 기준 Top N
     top_states = year_data.nlargest(top_n, 'value')
     
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 7))
     
-    # Value Top N
     ax1.barh(range(len(top_states)), top_states['value'].values[::-1], alpha=0.8, color='steelblue')
     ax1.set_xlabel('Value ($ millions)', fontsize=12, fontweight='bold')
     ax1.set_ylabel('State', fontsize=12, fontweight='bold')
@@ -262,7 +246,6 @@ def plot_value_ton_comparison(value_state_long, year=2024, top_n=15):
     ax1.set_yticklabels(top_states['state'].values[::-1])
     ax1.grid(axis='x', alpha=0.3)
     
-    # Tons Top N
     top_tons = year_data.nlargest(top_n, 'tons')
     ax2.barh(range(len(top_tons)), top_tons['tons'].values[::-1], alpha=0.8, color='coral')
     ax2.set_xlabel('Tons (thousands)', fontsize=12, fontweight='bold')
@@ -271,8 +254,5 @@ def plot_value_ton_comparison(value_state_long, year=2024, top_n=15):
     ax2.set_yticklabels(top_tons['state'].values[::-1])
     ax2.grid(axis='x', alpha=0.3)
     
-    #plt.tight_layout()
-    #plt.savefig('/mnt/user-data/outputs/value_ton_comparison.png', dpi=300, bbox_inches='tight')
-    #plt.close()
-    
-    print(f"차트 저장 완료: value_ton_comparison.png")
+    plt.tight_layout()
+    plt.show()
